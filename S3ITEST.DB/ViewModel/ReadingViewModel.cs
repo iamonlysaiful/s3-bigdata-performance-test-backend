@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace S3ITEST.DB.ResponseModel
+namespace S3ITEST.DB.ViewModel
 {
-    public class ReadingResponse
+    public class ReadingViewModel
     {
         public string BuildingName { get; set; }
         public string ObjectName { get; set; }

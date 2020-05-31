@@ -34,7 +34,6 @@ namespace S3ITEST.DATAACCESS.Repositories
                 return new List<Reading>();
             }
         }
-
         public IQueryable<Reading> GetReadingDataDBFilter(int buildingId, int objectId, int datafieldId, string startTime, string endTime)
         {
             try

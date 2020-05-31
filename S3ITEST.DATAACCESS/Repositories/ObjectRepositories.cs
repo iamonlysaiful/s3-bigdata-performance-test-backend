@@ -36,7 +36,6 @@ namespace S3ITEST.DATAACCESS.Repositories
                 return new List<Object>();
             }
         }
-
         public Object GetObjectById(int id)
         {
             try

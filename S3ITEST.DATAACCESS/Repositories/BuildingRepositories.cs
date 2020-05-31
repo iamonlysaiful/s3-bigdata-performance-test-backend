@@ -37,7 +37,6 @@ namespace S3ITEST.DATAACCESS.Repositories
                 return new List<Building>();
             }
         }
-
         public Building GetBuildingById(int id)
         {
             try

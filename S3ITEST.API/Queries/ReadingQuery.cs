@@ -1,12 +1,10 @@
 ﻿using GraphQL.Types;
 using S3ITEST.DATAACCESS.Repositories;
 using S3ITEST.TYPES;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using S3ITEST.DB.ViewModel;
 using S3ITEST.UTILITES;
-using S3ITEST.DB.ResponseModel;
 
 namespace S3ITEST.API.Queries
 {
@@ -17,9 +15,8 @@ namespace S3ITEST.API.Queries
             IBuildingRepositories buildingRepositories,
             IObjectRepositories objectRepositories,
             IDataFieldRepositories dataFieldRepositories
-            )
+        )
         {
-
 
             Name = "ReadingQuery";
             Field<ReadingResponseType>("readings",
@@ -48,25 +45,27 @@ namespace S3ITEST.API.Queries
                }),
                resolve: context =>
                {
-                   var bid = context.GetArgument<int>("buildingId");
-                   var oid = context.GetArgument<int>("objectId");
-                   var did = context.GetArgument<int>("datafieldId");
-                   var sTime = context.GetArgument<string>("startTime");
-                   var eTime = context.GetArgument<string>("endTime");
-                   var obj = new ReadingResponse();
-                   obj.BuildingName = buildingRepositories.GetBuildingById(bid).Name;
-                   obj.DataFieldName = dataFieldRepositories.GetDataFieldById(did).Name;
-                   obj.ObjectName= objectRepositories.GetObjectById(oid).Name;
-                   List<Int64> unixList = new List<Int64>();
+                   var buildingId = context.GetArgument<int>("buildingId");
+                   var objectId = context.GetArgument<int>("objectId");
+                   var datafieldId = context.GetArgument<int>("datafieldId");
+                   var startTime = context.GetArgument<string>("startTime");
+                   var endTime = context.GetArgument<string>("endTime");
+
+                   var obj = new ReadingViewModel();
+                   obj.BuildingName = buildingRepositories.GetBuildingById(buildingId).Name;
+                   obj.DataFieldName = dataFieldRepositories.GetDataFieldById(datafieldId).Name;
+                   obj.ObjectName= objectRepositories.GetObjectById(objectId).Name;
+                   List<long> unixList = new List<long>();
                    List<decimal> values = new List<decimal>();
-                   var readingDatas = readingRepositories.GetReadingDataDBFilter(bid, oid, did, sTime, eTime).OrderBy(x=>x.Timestamp);
+                   var readingDatas = readingRepositories.GetReadingDataDBFilter(buildingId, objectId, datafieldId, startTime, endTime).OrderBy(x=>x.Timestamp);
                    foreach (var item in readingDatas)
                    {
-                       unixList.Add(Convert.ToInt64((item.Timestamp - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
-                       values.Add(item.Value == null ? 0 : item.Value);
+                       unixList.Add(Extension.DatTimeToUnix(item.Timestamp));
+                       values.Add(item.Value);
                    }
                    obj.Timestamp = unixList;
                    obj.Value = values;
+
                    return obj;
 
                });

@@ -36,7 +36,6 @@ namespace S3ITEST.DATAACCESS.Repositories
                 return new List<DataField>();
             }
         }
-
         public DataField GetDataFieldById(int id)
         {
             try

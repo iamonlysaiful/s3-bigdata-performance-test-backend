@@ -1,9 +1,4 @@
 ﻿using GraphQL.Types;
-using S3ITEST.DATAACCESS.Repositories;
-using S3ITEST.DB.ResponseModel;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace S3ITEST.TYPES
 {

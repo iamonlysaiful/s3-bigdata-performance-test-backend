@@ -25,7 +25,6 @@ namespace S3ITEST.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -64,22 +63,14 @@ namespace S3ITEST.API
             services.AddSingleton<ObjectType>();
             services.AddSingleton<DataFieldType>();
             services.AddSingleton<BuildingType>();
-            services.AddSingleton<ReadingTypes>();
             services.AddSingleton<ReadingResponseType>();
-
-           // var sp = services.BuildServiceProvider();
-            //services.AddSingleton<ISchema>(new S3ITESTSchema(new FuncDependencyResolver(type => sp.GetService(type))));
 
             services.AddSingleton<IDependencyResolver>(_ => new FuncDependencyResolver(_.GetRequiredService));
             services.AddSingleton<ISchema, S3ITESTSchema>();
 
-            //services.AddScoped<IDependencyResolver>(_ => new FuncDependencyResolver(_.GetRequiredService));
-            //services.AddScoped<ISchema, S3ITESTSchemaCopy>();
-
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("AllowAll");
