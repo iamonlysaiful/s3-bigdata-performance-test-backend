@@ -102,7 +102,7 @@ It holds all DB Entities with Viewmodels.
 #### S3ITEST.TYPES
 As GraphQL is a strongly typed language. Here I include all my responses mapping with GraphQL Types.
 
-#### S3ITEST.TYPES
+#### S3ITEST.UTILITIES
 Some function I needed all over project, I included them here. 
 
 ## Feedback
