@@ -105,6 +105,12 @@ As GraphQL is a strongly typed language. Here I include all my responses mapping
 #### S3ITEST.UTILITIES
 Some function I needed all over project, I included them here. 
 
+## Screenshots
+
+![Image of GraphiQL UI](S3ITEST.API/Properties/readme-assets/img-2.png)
+
+GraphiQL UI.
+
 ## Feedback
 
 Any feedback would be gratefully recieved!
