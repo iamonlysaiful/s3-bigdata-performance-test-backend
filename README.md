@@ -44,16 +44,16 @@ TimescaleDB is an open-source, scalable SQL engine that meets these demands quit
 
 ## Project Discussion
 
-As Backend technology I used ASP.NET Core 3.1 Web API - GraphQL
+As Backend technology I used ASP.NET Core 3.1 - GraphQL
 
 > **Why I used GraphQL?**   
 Some Of reasons are:
-> * Strongly-typed Schema.  
-> All the types (such as Boolean, String, Int, Float, ID, Scalar) supported by the API are specified in the schema in GraphQL Schema Definition Language (SDL), which helps determine 
-the data that is available and the form it exists in. This, consequently, makes GraphQL less error-prone.
+> * **Strongly-typed Schema.**  
+> All the types (such as Boolean, String, Int, Float, ID, Scalar) supported by the API are specified in the schema in GraphQL Schema Definition Language (SDL), 
+which helps determine the data that is available and the form it exists in. This, consequently, makes GraphQL less error-prone.
 > * **No Over-Fetching or Under-Fetching.**  
 > With GraphQL, developers can fetch only what is required. Nothing less, nothing more. This solves the issues that arise due to over-fetching and under-fetching.
-> * Saves Time and Bandwidth.  
+> * **Saves Time and Bandwidth.**  
 > GraphQL allows making multiple resources request in a single query call, which saves a lot of time and bandwidth by reducing the number of network round trips to the server.
 > * **Schema Stitching for Combining Schemas.**  
 > Schema stitching allows combining multiple, different schemas into a single schema. In a microservices architecture, where each microservice handles the business 
@@ -63,13 +63,47 @@ into one that is accessed by the client.
 > In REST architecture, developers create new versions (e.g., api.domain.com/v1/, api.domain.com/v2/) due to changes in resources or the request/response structure of 
 the resources over time. Hence, maintaining versions is a common practice. With GraphQL, there is no need to maintain versions. The resource URL or address remains the same. 
 You can add new fields and deprecate older fields. This approach is intuitive as the client receives a deprecation warning when querying a deprecated field.
-> * Transform Fields and Resolve With Required Shape.  
+> * **Transform Fields and Resolve With Required Shape.**  
 > A user can define an alias for fields, and each of the fields can be resolved into different values.
 
 Refference read: https://dzone.com/articles/why-and-when-to-use-graphql-1
 
 #### Project Structure Details
+
+In brief, In this project I tried to maintain and focus on coding standard of **GraphQL .NET*** and **.NET Core 3.1**
+
+Here is my Project Structure:
+
 ![Image of Project Structure](S3ITEST.API/Properties/readme-assets/img-1.PNG)
+
+
+  * S3ITEST.API
+    * Controllers
+    * Queries
+    * Schema
+  * S3ITEST.DATAACCESS
+    * Repositories
+  * S3ITEST.DB
+    * EntityModels
+    * ViewModels
+  * S3ITEST.TYPES
+  * S3ITEST.UTILITIES
+
+#### S3ITEST.API
+Here I demonstrated graphql queries,schemas & api. Also integrated **GraphiQL UI** which Provides a 
+tabbed interface for editing and testing GraphQL.
+
+#### S3ITEST.DATAACCESS
+It holds all repositories. Here I used **Dapper** as ORM Tool and **Npgsql** as connection wrapper with postgres
+
+#### S3ITEST.DB
+It holds all DB Entities with Viewmodels.
+
+#### S3ITEST.TYPES
+As GraphQL is a strongly typed language. Here I include all my responses mapping with GraphQL Types.
+
+#### S3ITEST.TYPES
+Some function I needed all over project, I included them here. 
 
 ## Feedback
 
