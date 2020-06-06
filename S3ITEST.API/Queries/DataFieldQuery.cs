@@ -1,8 +1,6 @@
 ﻿using GraphQL.Types;
 using S3ITEST.DATAACCESS.Repositories;
 using S3ITEST.TYPES;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace S3ITEST.API.Queries
 {

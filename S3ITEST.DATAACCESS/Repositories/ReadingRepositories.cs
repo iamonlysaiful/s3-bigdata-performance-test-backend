@@ -1,70 +1,133 @@
 ﻿using S3ITEST.DB.EntityModels;
+using S3ITEST.DB.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
+using static S3ITEST.UTILITES.Extension;
 
 namespace S3ITEST.DATAACCESS.Repositories
 {
     public interface IReadingRepositories
     {
-        IQueryable<Reading> GetReadingDataDBFilter(int buildingId, int objectId, int datafieldId, string startTime, string endTime);
-        IEnumerable<Reading> GetReadingData();
+        PageInfo<ReadingViewModel> GetReadingData(int buildingId, int? objectId, int? datafieldId, string startTime, string endTime, int page, int size);
     }
     public class ReadingRepositories : BaseRepositories, IReadingRepositories
     {
         private readonly DapperDBContext _dbContext;
-        public ReadingRepositories(DapperDBContext dbContext)
+        private readonly IBuildingRepositories _buildingRepositories;
+        public ReadingRepositories(DapperDBContext dbContext, IBuildingRepositories buildingRepositories)
         {
             _dbContext = dbContext;
+            _buildingRepositories = buildingRepositories;
         }
-        public IEnumerable<Reading> GetReadingData()
+
+        public PageInfo<ReadingViewModel> GetReadingData(int buildingId, int? objectId, int? datafieldId, string startTime, string endTime, int page, int size)
         {
+            PageInfo<ReadingViewModel> res, req;
+            IEnumerable<ReadingViewModel> response;
+
+            req = new PageInfo<ReadingViewModel>(page, size, startTime, endTime);
             try
             {
-                var sql = @"SELECT     
-                           *
-                           FROM Readingv2";
-                var data = GetData<Reading>(sql, null, _dbContext).ToList();
-                return data;
-            }
-            catch (Exception ex)
-            {
-                return new List<Reading>();
-            }
-        }
-        public IQueryable<Reading> GetReadingDataDBFilter(int buildingId, int objectId, int datafieldId, string startTime, string endTime)
-        {
-            try
-            {
-                DateTime starttime = DateTime.ParseExact(startTime, "dd-MM-yyyyhh-mm-ss-tt", CultureInfo.InvariantCulture);
-                DateTime endtime = DateTime.ParseExact(endTime, "dd-MM-yyyyhh-mm-ss-tt", CultureInfo.InvariantCulture);
-                var sql = @"SELECT *
-                            FROM Readingv2
+                IEnumerable<Reading> filtered;
+                var sql = "";
+                object sqlParams = null;
+                if (objectId != null && datafieldId != null)
+                {
+                    sql = @"SELECT obj.Name || ' ' || df.Name DatapointName ,
+                            rv.Timestamp,
+                            rv.Value
+                            FROM Readingv2 rv
+							left join Object obj on obj.Id=rv.ObjectId
+							inner join DataField df on df.Id =rv.DataFieldId
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
                             AND BuildingId=@BuildingId
                             AND ObjectId=@ObjectId
                             AND DataFieldId=@DataFieldId";
-                var data = GetData<Reading>(
-                sql,
-                new
+
+                    sqlParams = new
+                    {
+                        StartTime = req.StartDate,
+                        EndTime = req.EndDate,
+                        BuildingId = buildingId,
+                        ObjectId = objectId,
+                        DataFieldId = datafieldId
+                    };
+                }
+                else if (objectId == null && datafieldId != null)
                 {
-                    StartTime = starttime,
-                    EndTime = endtime,
-                    BuildingId = buildingId,
-                    ObjectId = objectId,
-                    DataFieldId = datafieldId
-                },
-                _dbContext).AsQueryable();
-                return data;
+                    sql = @"SELECT obj.Name || ' ' || df.Name DatapointName,
+                            rv.Timestamp,
+                            rv.Value
+                            FROM Readingv2 rv
+							left join Object obj on obj.Id=rv.ObjectId
+							inner join DataField df on df.Id =rv.DataFieldId
+                            WHERE Timestamp BETWEEN @StartTime AND @EndTime
+                            AND BuildingId=@BuildingId
+                            AND DataFieldId=@DataFieldId";
+
+                    sqlParams = new
+                    {
+                        StartTime = req.StartDate,
+                        EndTime = req.EndDate,
+                        BuildingId = buildingId,
+                        DataFieldId = datafieldId
+                    };
+                }
+                else
+                {
+                    sql = @"SELECT obj.Name || ' ' || df.Name DatapointName ,
+                            rv.Timestamp,
+                            rv.Value
+                            FROM Readingv2 rv
+							left join Object obj on obj.Id=rv.ObjectId
+							inner join DataField df on df.Id =rv.DataFieldId
+                            WHERE Timestamp BETWEEN @StartTime AND @EndTime
+                            AND BuildingId=@BuildingId
+                            AND ObjectId=@ObjectId";
+
+                    sqlParams = new
+                    {
+                        StartTime = req.StartDate,
+                        EndTime = req.EndDate,
+                        BuildingId = buildingId,
+                        ObjectId = objectId
+                    };
+                }
+
+                filtered = GetData<Reading>(sql, sqlParams, _dbContext).AsQueryable();
+                //=================================================
+                List<ReadingViewModel> listReadings = new List<ReadingViewModel>();
+                List<string> dataPoints = filtered.Select(x => x.DatapointName).Distinct().ToList();
+                for (int i = 0; i < dataPoints.Count; i++)
+                {
+                    List<long> unixList = new List<long>();
+                    List<decimal> values = new List<decimal>();
+                    var datapointData = filtered.Where(x => x.DatapointName == dataPoints[i]);
+                    var obj = new ReadingViewModel();
+                    obj.BuildingName = _buildingRepositories.GetBuildingById(buildingId).Name;
+                    foreach (var item in datapointData)
+                    {
+                        unixList.Add(DatTimeToUnix(Convert.ToDateTime(item.Timestamp)));
+                        values.Add(Convert.ToDecimal(item.Value));
+                    }
+                    obj.DatapointName = dataPoints[i].ToString();
+                    obj.Timestamp = unixList;
+                    obj.Value = values;
+                    listReadings.Add(obj);
+                }
+                //=================================================
+
+                response = listReadings;
+                res = new PageInfo<ReadingViewModel>(response, req.TotalCount, req.Size);
+                return res;
             }
             catch (Exception ex)
             {
-                return new List<Reading>().AsQueryable();
+                response = new List<ReadingViewModel>().AsQueryable();
+                return res = new PageInfo<ReadingViewModel>(response, 0, size);
             }
-
-
         }
+
     }
 }

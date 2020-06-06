@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace S3ITEST.DB.EntityModels
 {
     public partial class DataField

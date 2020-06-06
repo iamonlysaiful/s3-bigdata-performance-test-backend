@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\S3ITEST.DB\S3ITEST.DB.csproj" />
+    <ProjectReference Include="..\S3ITEST.UTILITES\S3ITEST.UTILITES.csproj" />
   </ItemGroup>
 
 </Project>

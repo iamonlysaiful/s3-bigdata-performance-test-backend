@@ -27,12 +27,6 @@ namespace S3ITEST.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddMvc(option => option.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
-            //Cors Handler
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -44,30 +38,34 @@ namespace S3ITEST.API
                 });
             });
 
-            services.AddTransient<IBuildingRepositories, BuildingRepositories>();
-            services.AddTransient<IObjectRepositories, ObjectRepositories>();
-            services.AddTransient <IDataFieldRepositories, DataFieldRepositories>();
-            services.AddTransient <IReadingRepositories, ReadingRepositories>();
+            services.AddTransient<IBuildingRepositories, BuildingRepositories>()
+                    .AddTransient<IObjectRepositories, ObjectRepositories>()
+                    .AddTransient <IDataFieldRepositories, DataFieldRepositories>()
+                    .AddTransient <IReadingRepositories, ReadingRepositories>();
 
             var connection = new DapperDBContext(Configuration.GetConnectionString("DatabaseITEST"));
-            services.AddSingleton(connection);
+            services.AddSingleton(connection)
+                    .AddSingleton<IDocumentExecuter, DocumentExecuter>();
 
-            services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
+            services.AddSingleton<RootQuery>()
+                    .AddSingleton<BuildingQuery>()
+                    .AddSingleton<DataFieldQuery>()
+                    .AddSingleton<ObjectQuery>()
+                    .AddSingleton<ReadingQuery>();
 
-            services.AddSingleton<RootQuery>();
-            services.AddSingleton<BuildingQuery>();
-            services.AddSingleton<DataFieldQuery>();
-            services.AddSingleton<ObjectQuery>();
-            services.AddSingleton<ReadingQuery>();
+            services.AddSingleton<ObjectType>()
+                    .AddSingleton<DataFieldType>()
+                    .AddSingleton<BuildingType>()
+                    .AddSingleton<ReadingType>()
+                    .AddSingleton<ReadingResponseType>();
 
-            services.AddSingleton<ObjectType>();
-            services.AddSingleton<DataFieldType>();
-            services.AddSingleton<BuildingType>();
-            services.AddSingleton<ReadingResponseType>();
+            services.AddSingleton<IDependencyResolver>(_ => new FuncDependencyResolver(_.GetRequiredService))
+                    .AddSingleton<ISchema, S3ITESTSchema>();
 
-            services.AddSingleton<IDependencyResolver>(_ => new FuncDependencyResolver(_.GetRequiredService));
-            services.AddSingleton<ISchema, S3ITESTSchema>();
-
+            services.AddControllers();
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
         }
 

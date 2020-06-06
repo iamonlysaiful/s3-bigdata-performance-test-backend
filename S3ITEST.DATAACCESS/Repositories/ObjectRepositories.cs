@@ -24,12 +24,10 @@ namespace S3ITEST.DATAACCESS.Repositories
             {
                 var sql = @"SELECT     
                            *
-                           FROM Object
-                           Order by id ASC";
-
+                           FROM Object;";
                 var data = GetData<Object>(sql, null, _dbContext).ToList();
-
-                return data;
+                data.Add(new Object { Id = 0, Name = "All" });
+                return data.OrderBy(x=>x.Id);
             }
             catch (System.Exception ex)
             {
