@@ -56,7 +56,22 @@ namespace S3ITEST.DATAACCESS.Repositories
                 }
                 else if (objectId == null && datafieldId != null)
                 {
-                    sql = @"SELECT obj.Name || ' ' || df.Name DatapointName,
+                    if (req.Size >= 365)
+                    {
+                        sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
+							                date_trunc('week', rv.Timestamp::timestamp) AS                             Timestamp,
+                                            sum(rv.Value) as Value
+                                            FROM Readingv2 rv
+							                left join Object obj on obj.Id=rv.ObjectId
+							                inner join DataField df on df.Id =rv.DataFieldId
+                                            WHERE Timestamp BETWEEN @StartTime AND @EndTime
+                                            AND BuildingId=@BuildingId
+                                            AND DatafieldId=@DataFieldId
+                                  group by 1,2";
+                    }
+                    else
+                    {
+                        sql = @"SELECT obj.Name || ' ' || df.Name DatapointName,
                             rv.Timestamp,
                             rv.Value
                             FROM Readingv2 rv
@@ -65,6 +80,8 @@ namespace S3ITEST.DATAACCESS.Repositories
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
                             AND BuildingId=@BuildingId
                             AND DataFieldId=@DataFieldId";
+                    }
+
 
                     sqlParams = new
                     {
@@ -76,7 +93,22 @@ namespace S3ITEST.DATAACCESS.Repositories
                 }
                 else
                 {
-                    sql = @"SELECT obj.Name || ' ' || df.Name DatapointName ,
+                    if (req.Size >= 365)
+                    {
+                        sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
+							                date_trunc('week', rv.Timestamp::timestamp) AS                             Timestamp,
+                                            sum(rv.Value) as Value
+                                            FROM Readingv2 rv
+							                left join Object obj on obj.Id=rv.ObjectId
+							                inner join DataField df on df.Id =rv.DataFieldId
+                                            WHERE Timestamp BETWEEN @StartTime AND @EndTime
+                                            AND BuildingId=@BuildingId
+                                            AND ObjectId=@ObjectId
+                                  group by 1,2";
+                    }
+                    else
+                    {
+                        sql = @"SELECT obj.Name || ' ' || df.Name DatapointName ,
                             rv.Timestamp,
                             rv.Value
                             FROM Readingv2 rv
@@ -85,6 +117,8 @@ namespace S3ITEST.DATAACCESS.Repositories
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
                             AND BuildingId=@BuildingId
                             AND ObjectId=@ObjectId";
+                    }
+
 
                     sqlParams = new
                     {
