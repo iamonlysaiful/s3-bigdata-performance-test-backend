@@ -137,7 +137,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                 {
                     List<long> unixList = new List<long>();
                     List<decimal> values = new List<decimal>();
-                    var datapointData = filtered.Where(x => x.DatapointName == dataPoints[i]);
+                    var datapointData = filtered.Where(x => x.DatapointName == dataPoints[i]).OrderBy(x => x.Timestamp);
                     var obj = new ReadingViewModel();
                     obj.BuildingName = _buildingRepositories.GetBuildingById(buildingId).Name;
                     foreach (var item in datapointData)
