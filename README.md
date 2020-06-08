@@ -44,7 +44,7 @@ TimescaleDB is an open-source, scalable SQL engine that meets these demands quit
 
 ## Project Discussion
 
-As Backend technology I used ASP.NET Core 3.1 - GraphQL
+As Backend technology I used ASP.NET Core 3.1 - GraphQL API
 
 > **Why I used GraphQL?**   
 Some Of reasons are:
@@ -70,7 +70,7 @@ Refference read: https://dzone.com/articles/why-and-when-to-use-graphql-1
 
 #### Project Structure Details
 
-In brief, In this project I tried to maintain and focus on coding standard of **GraphQL .NET*** and **.NET Core 3.1**
+In brief, In this project I tried to maintain and focus on  coding standard specially of **GraphQL .NET** and **.NET Core 3.1**
 
 Here is my Project Structure:
 
@@ -90,7 +90,7 @@ Here is my Project Structure:
   * S3ITEST.UTILITIES
 
 #### S3ITEST.API
-Here I demonstrated graphql queries,schemas & api. Also integrated **GraphiQL UI** which Provides a 
+Here I demonstrated graphql Queries, Schemas & API. Also integrated **GraphiQL UI** which Provides a 
 tabbed interface for editing and testing GraphQL.
 
 #### S3ITEST.DATAACCESS
@@ -103,7 +103,7 @@ It holds all DB Entities with Viewmodels.
 As GraphQL is a strongly typed language. Here I include all my responses mapping with GraphQL Types.
 
 #### S3ITEST.UTILITIES
-Some function I needed all over project, I included them here. 
+Some function I may need all over project, I included them here. 
 
 ## Screenshots
 
