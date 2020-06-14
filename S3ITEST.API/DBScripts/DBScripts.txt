@@ -1,0 +1,25 @@
+﻿
+--Create HyperTable to Reading Table
+
+SELECT create_hypertable('readingv2', 'timestamp');
+
+
+
+--Compress Reading Table
+
+ALTER TABLE readingv2 SET (
+  timescaledb.compress,
+  timescaledb.compress_segmentby = 'buildingid'
+);
+
+SELECT add_compress_chunks_policy('readingv2', INTERVAL '7 days');
+
+
+
+--Generate Index
+
+CREATE INDEX readingv2_clustered_idx
+    ON public.readingv2 USING btree
+    ("timestamp" DESC NULLS FIRST, buildingid ASC NULLS LAST, objectid ASC NULLS LAST, datafieldid ASC NULLS LAST)
+    TABLESPACE pg_default;
+
