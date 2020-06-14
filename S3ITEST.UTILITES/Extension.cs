@@ -15,6 +15,7 @@ namespace S3ITEST.UTILITES
             public DateTime StartDate { get; private set; }
             public DateTime EndDate { get; private set; }
             public IEnumerable<T> List { get; private set; }
+           
             public PageInfo(IEnumerable<T> list, double totalCount, int size)
             {
                 List = list;
@@ -32,6 +33,13 @@ namespace S3ITEST.UTILITES
                 StartDate = StartDate.AddDays((page * Size) - Size);
                 int daycount = DayDifference(StartDate, EndDate);
                 EndDate = StartDate.AddDays(Size < daycount ? Size : daycount);
+            }
+
+            public PageInfo(string startTime, string endTime)
+            {
+                StartDate = DateTime.ParseExact(startTime, "dd-MM-yyyyhh-mm-ss-tt", CultureInfo.InvariantCulture);
+                EndDate = DateTime.ParseExact(endTime, "dd-MM-yyyyhh-mm-ss-tt", CultureInfo.InvariantCulture);
+                TotalCount = DayDifference(StartDate, EndDate);
             }
         }
 
