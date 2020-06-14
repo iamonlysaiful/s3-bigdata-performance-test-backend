@@ -26,9 +26,13 @@ In given link I provided my front-end project including specific details with RE
 * PostgreSQL (Version: >=11)
 * TimescaleDB 
 
-##  Dependency Installation
+## Project Initialization & Dependency Installation
 
-After opening cloned project, build project.
+* After opening cloned project, build project.
+* Change DB Connection string 
+* Change Reading Table Name on appsettings.json (if neeeded) 
+
+N.B In my case reading table name is **ReadingV2**
 
 
 ## DB Disccussion
