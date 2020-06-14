@@ -30,6 +30,7 @@ In given link I provided my front-end project including specific details with RE
 
 * After opening cloned project, build project.
 * Change DB Connection string 
+* Run DBScript from **DBScript** at **S3ITEST.API**
 * Change Reading Table Name on appsettings.json (if neeeded) 
 
 N.B In my case reading table name is **ReadingV2**
