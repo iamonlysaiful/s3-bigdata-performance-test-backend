@@ -11,4 +11,9 @@ namespace S3ITEST.DB.EntityModels
         public decimal Value { get; set; }
         public DateTime Timestamp { get; set; }
     }
+
+    public class ReadingConfig
+    {
+        public string ReadingTableName { get; set; }
+    }
 }

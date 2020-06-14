@@ -15,11 +15,13 @@ namespace S3ITEST.DATAACCESS.Repositories
     public class ReadingRepositories : BaseRepositories, IReadingRepositories
     {
         private readonly DapperDBContext _dbContext;
+        private readonly ReadingConfig _readingConfig;
         private readonly IBuildingRepositories _buildingRepositories;
-        public ReadingRepositories(DapperDBContext dbContext, IBuildingRepositories buildingRepositories)
+        public ReadingRepositories(DapperDBContext dbContext, IBuildingRepositories buildingRepositories, ReadingConfig readingConfig)
         {
             _dbContext = dbContext;
             _buildingRepositories = buildingRepositories;
+            _readingConfig = readingConfig;
         }
 
         public PageInfo<ReadingViewModel> GetReadingData(int buildingId, int? objectId, int? datafieldId, string startTime, string endTime, int page, int size)
@@ -40,7 +42,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('month', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -54,7 +56,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('week', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -68,7 +70,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT obj.Name || ' ' || df.Name DatapointName,
                             rv.Timestamp,
                             rv.Value
-                            FROM Readingv2 rv
+                            FROM " + _readingConfig.ReadingTableName + @" rv
 							left join Object obj on obj.Id=rv.ObjectId
 							inner join DataField df on df.Id =rv.DataFieldId
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -93,7 +95,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('month', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -106,7 +108,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('week', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -119,7 +121,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT obj.Name || ' ' || df.Name DatapointName,
                             rv.Timestamp,
                             rv.Value
-                            FROM Readingv2 rv
+                            FROM " + _readingConfig.ReadingTableName + @" rv
 							left join Object obj on obj.Id=rv.ObjectId
 							inner join DataField df on df.Id =rv.DataFieldId
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -142,7 +144,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('month', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -155,7 +157,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('week', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -168,7 +170,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT obj.Name || ' ' || df.Name DatapointName ,
                             rv.Timestamp,
                             rv.Value
-                            FROM Readingv2 rv
+                            FROM " + _readingConfig.ReadingTableName + @" rv
 							left join Object obj on obj.Id=rv.ObjectId
 							inner join DataField df on df.Id =rv.DataFieldId
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -191,7 +193,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('month', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -203,7 +205,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT  obj.Name || ' ' || df.Name DatapointName ,
 							                date_trunc('week', rv.Timestamp::timestamp) AS Timestamp,
                                             avg(rv.Value) as Value
-                                            FROM Readingv2 rv
+                                            FROM " + _readingConfig.ReadingTableName + @" rv
 							                left join Object obj on obj.Id=rv.ObjectId
 							                inner join DataField df on df.Id =rv.DataFieldId
                                             WHERE Timestamp BETWEEN @StartTime AND @EndTime
@@ -215,7 +217,7 @@ namespace S3ITEST.DATAACCESS.Repositories
                         sql = @"SELECT obj.Name || ' ' || df.Name DatapointName ,
                             rv.Timestamp,
                             rv.Value
-                            FROM Readingv2 rv
+                            FROM " + _readingConfig.ReadingTableName + @" rv
 							left join Object obj on obj.Id=rv.ObjectId
 							inner join DataField df on df.Id =rv.DataFieldId
                             WHERE Timestamp BETWEEN @StartTime AND @EndTime

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using S3ITEST.API.Queries;
 using S3ITEST.API.Schema;
@@ -45,6 +46,8 @@ namespace S3ITEST.API
 
             var connection = new DapperDBContext(Configuration.GetConnectionString("DatabaseITEST"));
             services.AddSingleton(connection)
+                    .Configure<ReadingConfig>(Configuration.GetSection("ReadingConfig"))
+                    .AddSingleton(r => r.GetRequiredService<IOptions<ReadingConfig>>().Value)
                     .AddSingleton<IDocumentExecuter, DocumentExecuter>();
 
             services.AddSingleton<RootQuery>()
