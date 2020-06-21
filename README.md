@@ -14,7 +14,7 @@
 
 ## Frontend Git Repository
 
-https://gitlab.com/iamonlysaiful/s3-bigdata-performance-test-frontend
+https://github.com/iamonlysaiful/s3-bigdata-performance-test-frontend
 
 In given link I provided my front-end project including specific details with README.md
 
